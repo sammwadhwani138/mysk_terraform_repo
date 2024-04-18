@@ -21,10 +21,10 @@ stages:
         provider: 'azurerm'
         command: 'custom'
         customCommand: 'init -reconfigure'
-        environmentServiceNameAzureRM: 'Azure subscription 1(20daa5d9-ab19-4c49-b7c7-d57603a39b75)'
-        backendServiceArm: 'Azure subscription 1(20daa5d9-ab19-4c49-b7c7-d57603a39b75)'
+        environmentServiceNameAzureRM: 'Azure subscription 1(00000000000-ab19-4c49-b7c7-XXXXXXXXXXXX)'
+        backendServiceArm: 'Azure subscription 1(00000000000-ab19-4c49-b7c7-XXXXXXXXXXXX)'
         backendAzureRmResourceGroupName: 'my-azure-demo'
-        backendAzureRmStorageAccountName: 'skdemosgv2'
+        backendAzureRmStorageAccountName: 'skdexxxxx2'
         backendAzureRmContainerName: 'sg-tf-01'
         backendAzureRmKey: 'ado/ado.terraform.tfstate'
       displayName: Job-Step-Terraform-Init
@@ -41,7 +41,7 @@ stages:
         command: 'custom'
         customCommand: 'fmt'
         outputTo: 'console'
-        environmentServiceNameAzureRM: 'Azure subscription 1(20daa5d9-ab19-4c49-b7c7-d57603a39b75)'
+        environmentServiceNameAzureRM: 'Azure subscription 1(00000000000-ab19-4c49-b7c7-XXXXXXXXXXXX)'
       displayName: Job-Step-Terraform-Format
    
     - task: TerraformTaskV4@4
@@ -49,7 +49,7 @@ stages:
         provider: 'azurerm'
         command: 'plan'
         commandOptions: '-out $(Build.SourcesDirectory)/tfplanfile'
-        environmentServiceNameAzureRM: 'Azure subscription 1(20daa5d9-ab19-4c49-b7c7-d57603a39b75)'
+        environmentServiceNameAzureRM: 'Azure subscription 1(00000000000-ab19-4c49-b7c7-XXXXXXXXXXXX)'
       displayName: Job-Step-Terraform-Plan
 
     - task: ArchiveFiles@2
