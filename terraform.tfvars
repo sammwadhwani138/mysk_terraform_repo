@@ -1,7 +1,7 @@
 v_env="dev1"
 v_location = "West Europe"
 v_prefix   = "myeuro"
-v_subscription_id = "20daa5d9-ab19-4c49-b7c7-d57603a39b75"
+v_subscription_id = "00000000000-ab19-4c49-b7c7-d57603a39b75"
 v_provider_rg = "my-azure-demo"
 v_akv_name="mysk-akv"
 # v_akv_sku="standard"
