@@ -1,0 +1,69 @@
+# Starter pipeline
+
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+
+stages:
+- stage: build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'custom'
+        customCommand: 'init -reconfigure'
+        environmentServiceNameAzureRM: 'Azure subscription 1(00000000000-ab19-4c49-b7c7-XXXXXXXXXXXX)'
+        backendServiceArm: 'Azure subscription 1(00000000000-ab19-4c49-b7c7-XXXXXXXXXXXX)'
+        backendAzureRmResourceGroupName: 'my-azure-demo'
+        backendAzureRmStorageAccountName: 'skdexxxxx2'
+        backendAzureRmContainerName: 'sg-tf-01'
+        backendAzureRmKey: 'ado/ado.terraform.tfstate'
+      displayName: Job-Step-Terraform-Init
+   
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+      displayName: Job-Step-Terraform-Validate
+      
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'custom'
+        customCommand: 'fmt'
+        outputTo: 'console'
+        environmentServiceNameAzureRM: 'Azure subscription 1(00000000000-ab19-4c49-b7c7-XXXXXXXXXXXX)'
+      displayName: Job-Step-Terraform-Format
+   
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        commandOptions: '-out $(Build.SourcesDirectory)/tfplanfile'
+        environmentServiceNameAzureRM: 'Azure subscription 1(00000000000-ab19-4c49-b7c7-XXXXXXXXXXXX)'
+      displayName: Job-Step-Terraform-Plan
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
+      displayName: Job-Step-Archive Build
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: '$(Build.BuildId)-build'
+        publishLocation: 'Container'
+      displayName: Job-Step-PublishBuildArtifacts
